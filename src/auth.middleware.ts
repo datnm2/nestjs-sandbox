@@ -16,7 +16,6 @@ const SERMANTIC_VERSION_REXGEX =
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   public use(req: Request, res: Response, next: NextFunction) {
-    console.log('Request...AuthMiddleware');
 
     next();
   }

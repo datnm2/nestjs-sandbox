@@ -13,5 +13,18 @@ async function bootstrap() {
     header: HEADER_VERSIONING,
   });
   await app.listen(6789);
+
+  while (true) {
+    const activeHandles = process.getMaxListeners();
+    const activeRequests = process._getActiveRequests();
+
+    console.log('Active Handles:', activeHandles);
+    console.log('Active Requests:', activeRequests);
+
+    // If there are no active handles or requests, the event loop will be empty and Node.js can exit.
+    if (activeHandles.length === 0 && activeRequests.length === 0) {
+      console.log('Event loop is empty!');
+    }
+  }
 }
 bootstrap();

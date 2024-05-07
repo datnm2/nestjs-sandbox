@@ -22,16 +22,19 @@ export class FeatureController {
   getHello(): string {
     return 'v0.0';
   }
+
   @Get('cats')
   @Version(VERSION_1_1)
   getCats11(): string {
     return 'cat v1.1';
   }
+
   @Get('cats')
   @Version('1.0')
   getCats1(): string {
     return 'cat v1.0';
   }
+  
   @Get('cats')
   getCats(): string {
     return 'cat v0.0';

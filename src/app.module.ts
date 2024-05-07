@@ -4,11 +4,21 @@ import { AppService } from './app.service';
 import { FeatureController } from './feature.controller';
 import { ApiVersioningMiddleware } from './api-versioning.middleware';
 import { AuthMiddleware } from './auth.middleware';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [],
+  imports: [
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      verboseMemoryLeak: true,
+      maxListeners: 10,
+    }),
+    DatabaseModule,
+  ],
   controllers: [AppController, FeatureController],
-  providers: [AppService],
+  providers: [AppService, DatabaseModule],
+  exports: [DatabaseModule],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
