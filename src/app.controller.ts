@@ -31,9 +31,9 @@ export class AppController {
       point: Sequelize.literal(`COALESCE(point, 0) + ${data.increasePoint}`) as unknown as number,
     }));
 
-    const results = await this.testModel.upsert(updateValues, {
-      updateOnDuplicate: ['point'] // Specify the fields to update if a duplicate key is found
-    });
-    return results;
+    // const results = await this.testModel.upsert(updateValues, {
+    //   updateOnDuplicate: ['point'] // Specify the fields to update if a duplicate key is found
+    // });
+    return [];
   }
 }
