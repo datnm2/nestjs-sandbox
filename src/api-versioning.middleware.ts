@@ -16,7 +16,7 @@ const SERMANTIC_VERSION_REXGEX =
 @Injectable()
 export class ApiVersioningMiddleware implements NestMiddleware {
   public use(req: Request, res: Response, next: NextFunction) {
-    console.log('Request...ApiVersioningMiddleware');
+    // console.log('Request...ApiVersioningMiddleware');
     const versionFromRequest = req.headers[HEADER_VERSIONING] as string;
     if (versionFromRequest) {
       if (SERMANTIC_VERSION_REXGEX.test(versionFromRequest)) {

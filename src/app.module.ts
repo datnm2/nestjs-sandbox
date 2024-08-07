@@ -8,6 +8,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DatabaseModule } from './database/database.module';
 import { Queue } from 'bullmq';
 import { QueueModule } from './queue/queue.module';
+import { BicController } from './bic/bic.controller';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { QueueModule } from './queue/queue.module';
     DatabaseModule,
     QueueModule
   ],
-  controllers: [AppController, FeatureController],
+  controllers: [AppController, FeatureController, BicController],
   providers: [AppService, DatabaseModule],
   exports: [DatabaseModule],
 })

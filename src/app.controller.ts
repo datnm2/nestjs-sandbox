@@ -1,4 +1,4 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Header, Logger, Post, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TestModel } from './database/models';
 import { InjectModel } from '@nestjs/sequelize';
@@ -8,6 +8,13 @@ import { QueueService } from './queue/queue.service';
 import { JobNames, QueueNames } from './queue/constants';
 import { CronExpression } from '@nestjs/schedule';
 import { get } from 'http';
+import { CommunityReferee, FindRefereeQuery, sleep } from './ulti';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { IsBoolean, IsDateString, IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { Readable } from 'stream';
+import * as csv from 'fast-csv';
+import { CsvReportRow } from './csv';
 
 @Controller()
 export class AppController {
@@ -91,7 +98,16 @@ export class AppController {
 
   @Get("test-heavy-task")
   async testHeavyTask(): Promise<string> {
-    await this.heavyProcessTask(1000);
+    const [
+      heavyTask1,
+      heavyTask2,
+      heavyTask3,
+    ]
+      = await Promise.all([
+        this.heavyProcessTask(1),
+        this.heavyProcessTask(2),
+        this.heavyProcessTask(3),
+      ]);
 
     console.log('Heavy task completed');
     return 'Heavy task completed';
@@ -105,16 +121,19 @@ export class AppController {
 
   async heavyProcessTask(processId: number): Promise<string> {
     let checkedNumbers = [];
-    for (let i = 0; i < 10; i++) {
+    const jobId = Math.floor(Math.random() * 1000000000) + 1000000000; // Generate a random number between 2bilion and 3bilion
+    console.log(`${processId}: process started with jobId: ${jobId}`);
+    for (let i = 0; i < 3; i++) {
       // Simulate a heavy computational task
-      const num = Math.floor(Math.random() * 1000000000) + 100000000000; // Generate a random number between 100bilion and 101bilion
-      console.log(`${processId}: Checking ${num}`);
-      for (let j = 2; j <= num; j++) {
+      console.log(`${processId}: Checking time: ${i + 1}`);
+      for (let j = 2; j <= jobId; j++) {
         // checkedNumbers.push({ num, j }); //test JavaScript heap out of memory
-        if (num % j === 10000000) {
-          console.log(`${processId}: num and j are ${num} and ${j}`);
+        if (jobId % j === 1000000) {
+          console.log(`${processId}:${i + 1}:${jobId}: lucky number:${j}`);
+          await sleep(500);
         }
       }
+      console.log(`${processId}: jobId ${jobId} doneeeeeeeeeeeeeeeeeeeeeee0000000000000000`);
     }
 
     return `${processId}: Heavy task completed`;
@@ -132,4 +151,6 @@ export class AppController {
     throw new Error('Failed job');
   }
 
+
 }
+
