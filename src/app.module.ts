@@ -6,6 +6,8 @@ import { ApiVersioningMiddleware } from './api-versioning.middleware';
 import { AuthMiddleware } from './auth.middleware';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DatabaseModule } from './database/database.module';
+import { Queue } from 'bullmq';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
       maxListeners: 10,
     }),
     DatabaseModule,
+    QueueModule
   ],
   controllers: [AppController, FeatureController],
   providers: [AppService, DatabaseModule],
